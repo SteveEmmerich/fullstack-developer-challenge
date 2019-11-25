@@ -1,0 +1,38 @@
+<ion-content>
+    <ion-toolbar>
+        <ion-searchbar></ion-searchbar>
+      </ion-toolbar>
+<ion-list *ngIf="pokemon$ | async">
+  <ion-card *ngFor="let pokemon of (pokemon$ | async)" (click)="pokemon.showDetails = !pokemon.showDetails" >
+    <ion-card-header>
+        <ion-card-title>  
+      
+       {{pokemon?.name}}
+       <ion-avatar>
+          <ion-img [src]="pokemon?.img" [alt]="pokemon.name"></ion-img>
+        </ion-avatar>
+      </ion-card-title>
+    </ion-card-header>
+   
+    <ion-card-content>
+    <expandable expandHeight="100px" [expanded]="pokemon?.showDetails">
+    
+      <ion-item inset>
+      <ion-label>number: {{pokemon?.id}}</ion-label>
+      <ion-label>about: {{pokemon?.description}}</ion-label>
+      <ion-button (click)="addPokemon(pokemon)">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    </expandable>
+  </ion-card-content>
+  </ion-card>
+</ion-list>
+<ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

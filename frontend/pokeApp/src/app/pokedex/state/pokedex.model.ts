@@ -3,4 +3,5 @@ export default interface PokedexEntry {
   img: string;
   description: string;
   name: string;
+  showDetails?: boolean;
 }
