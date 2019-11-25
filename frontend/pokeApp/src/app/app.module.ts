@@ -13,6 +13,8 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from './shared/shared.module';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +25,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    SharedModule,
+    AuthModule,
     NgxsModule.forRoot([]),
     NgxsFormPluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
