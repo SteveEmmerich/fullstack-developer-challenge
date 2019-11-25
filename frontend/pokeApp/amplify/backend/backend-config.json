@@ -1,0 +1,9 @@
+{
+	"auth": {
+		"pokeappbc1ee16f": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+		}
+	}
+}
