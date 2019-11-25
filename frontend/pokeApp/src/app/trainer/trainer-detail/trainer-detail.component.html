@@ -1,0 +1,30 @@
+<ion-card>
+  <ion-card-header color="primary">
+  
+    <ion-item  lines="none" color="primary">
+    <ion-card-title color="secondary">{{(trainer$ | async)?.name}}
+    </ion-card-title>
+    <ion-button *ngIf="!edit" (click)="toggleEdit()" color="secondary" fill="outline" slot="end">Edit</ion-button>
+    <ion-button *ngIf="edit && (trainer$ | async) as trainer" (click)="saveChanges(trainer.id)" color="secondary" fill="outline" slot="end">Done</ion-button>
+    
+    </ion-item>
+     
+  </ion-card-header>
+  <ion-card-content *ngIf="(trainer$ | async) as trainer">
+      <form #tform id="trainerform" [formGroup]="updateTrainerForm" ngxsForm="trainers.updateTrainerForm">
+      <ion-item>
+        <ion-label>Age:</ion-label>
+        <div style="float: right;" *ngIf="!edit">{{trainer.age}}</div>
+        <ion-input *ngIf="edit" type="text" formControlName="age" #age></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Email:</ion-label>
+        {{ trainer.email }}
+      </ion-item>
+      <ion-item>
+        <ion-label>Number Of Pokemon:</ion-label>
+        {{ pokemonCount$ | async }}
+      </ion-item>
+    </form>
+  </ion-card-content>
+</ion-card>
