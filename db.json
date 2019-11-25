@@ -16,19 +16,10 @@
       "id": "p1",
       "trainerId": "t1",
       "order": 1,
-      "nickname": "patches",
+      "nickname": "patches o",
       "img": "",
       "description": "its a pokemon",
       "name": "psyduck"
-    },
-    {
-      "id": "p2",
-      "trainerId": "t1",
-      "order": 1,
-      "nickname": "charcole",
-      "img": "",
-      "description": "its a pokemon",
-      "name": "charmander"
     }
   ],
   "pokedex": [
