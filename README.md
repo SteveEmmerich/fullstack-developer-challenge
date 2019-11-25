@@ -3,31 +3,26 @@ The following exercise is to gauge the developer’s expertise in the various te
 
 ## What will you do
 
-In this exercise you will be tasked with creating a simple inventory system for an item of your choosing. This item can be anything from characters in a movie, collectables (like trading cards), or pictures of cats. These items should be managed through a web interface that offers persistence through a database.
+Manage your trainer and their roster of pokemon through a mobile ready interface. 
 
 ## What are the functional requirement
 
-1. There should be a front-end web interface that allows a user to 
-    1. View a list of all items in the inventory
-    2. View a single item from the inventory
-    3. Add an item to the inventory
-    4. Edit/Delete an item the exists in the inventory
-2. There should be a RESTful API which handles all data transmission
-3. There should be persistence in the form of a simple database
-4. All items in the inventory should have multiple properties including
-    1. An ID
-    2. A name
-    3. A description
-    4. A picture 
-    5. Any other relevant fields
+1. View trainer data
+    1. Edit trainer age
+    2. Use amplify for login and other trainer information
+2. Lambda functions for CRUD opperations
+3. RDS to hold the roster of pokemon and thier changes
+    1. Add a pokemon to roster
+    2. Remove a pokemon from roster
+    3. Edit a pokemons nickname
+4. Search for pokemon in the "Pokedex" to add to roster.
+
 
 ## What technologies should you use
-
-Bellese Technologies uses a wide range of technologies across the entire stack. Primarily, Bellese has a focus on using Angular 7 and greater, Go, and Postgres through various AWS services. If you do not have an aptitude in one of the aforementioned languages, you are encouraged to use a technology that will allow you to complete the exercise and demonstrate the relevant theoretical knowledge.
-
-	1. Frontend - should demonstrate a thorough understanding of the framework used in the solution and ui best-practices including event handling
-	2. Backend - should demonstrate best-practices with respect to route handling and REST
-	3. Database - the database, though small, should demonstrate best practices for data persistence
+1. Ionic/Angular 8
+2. AWS Amplify
+3. AWS Lambda (Node)
+4. AWS RDS (postgres)
 
 ## How this will be reviewed
 
