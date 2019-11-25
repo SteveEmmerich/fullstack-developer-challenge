@@ -7,6 +7,8 @@ import { TabsPageRoutingModule } from './tabs-routing.module';
 
 import { TabsPage } from './tabs.page';
 import { TrainerModule } from '../trainer/trainer.module';
+import { PokemonModule } from '../pokemon/pokemon.module';
+import { PokedexModule } from '../pokedex/pokedex.module';
 
 @NgModule({
   imports: [
@@ -14,6 +16,8 @@ import { TrainerModule } from '../trainer/trainer.module';
     CommonModule,
     FormsModule,
     TrainerModule,
+    PokemonModule,
+    PokedexModule,
     TabsPageRoutingModule
   ],
   declarations: [TabsPage]

@@ -3,7 +3,6 @@ import { Store, Select } from '@ngxs/store';
 import { TrainerStateModel, TrainerState } from '../state/trainer.state';
 import { Observable } from 'rxjs';
 import { TrainerFetch, TrainerPatch } from '../state/trainer.actions';
-import { tap } from 'rxjs/operators';
 import { FormGroup, FormControl } from '@angular/forms';
 
 
@@ -16,7 +15,7 @@ export class TrainerDetailComponent implements OnInit {
 
   @Select(TrainerState.trainer) trainer$: Observable<TrainerStateModel>;
   @Select(TrainerState.rosterCount) pokemonCount$: Observable<number>;
-  edit: boolean = false;
+  edit = false;
   age: string;
   updateTrainerForm = new FormGroup({
     age: new FormControl()
