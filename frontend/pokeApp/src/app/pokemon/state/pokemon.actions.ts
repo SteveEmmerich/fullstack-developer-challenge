@@ -2,11 +2,12 @@ import Pokemon from './pokemon.model';
 
 export class GetAllPokemon {
   static readonly type = '[Pokemon] Get All';
+  constructor(public payload: {tid: string}) {}
 }
 
 export class AddPokemon {
   static readonly type = '[Pokemon] Add';
-  constructor(public payload: Pokemon) { }
+  constructor(public payload: {tid: string, data: Pokemon}) { }
 }
 
 export class EditPokemon {
@@ -21,5 +22,5 @@ export class DeletePokemon {
 
 export class ReorderPokemon {
   static readonly type = '[Pokemon] Reorder';
-  constructor(public payload: {idOne: string, idTwo: string}) {}
+  constructor(public payload: {from: number, to: number}) {}
 }

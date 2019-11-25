@@ -1,4 +1,4 @@
-import { State, Action, StateContext } from '@ngxs/store';
+import { State, Action, StateContext, Selector } from '@ngxs/store';
 import {
   GetAllPokemon,
   AddPokemon,
@@ -9,6 +9,7 @@ import {
 import Pokemon from './pokemon.model';
 import { PokemonService } from 'src/app/pokemon/services/pokemon.service';
 import { tap } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 
 export class PokemonStateModel {
   roster: Pokemon[];
@@ -34,12 +35,21 @@ export class PokemonStateModel {
 })
 export class PokemonState {
 
+  @Selector()
+  static roster(state: PokemonStateModel) {
+    return state.roster.sort((a, b) => {
+      return a.order > b.order ? 1 : 0;
+    });
+  }
+
   constructor(private api: PokemonService) {}
 
   @Action(GetAllPokemon)
-  getAll(ctx: StateContext<PokemonStateModel>, action: AddPokemon) {
+  getAll(ctx: StateContext<PokemonStateModel>, action: GetAllPokemon) {
     const state = ctx.getState();
-    this.api.fetch().pipe(
+    const { tid } = action.payload;
+    console.log('fetching all with id: ', tid)
+    return this.api.fetch(tid).pipe(
       tap(res => {
         const pokemon = res;
         ctx.patchState({ roster: [...pokemon ]});
@@ -49,7 +59,8 @@ export class PokemonState {
   @Action(AddPokemon)
   add(ctx: StateContext<PokemonStateModel>, action: AddPokemon) {
     const state = ctx.getState();
-    this.api.post(action.payload).pipe(
+    const { data } = action.payload;
+    return this.api.post(data).pipe(
       tap(res => {
         const pokemon = res;
         ctx.patchState({ roster: [...state.roster, pokemon ]});
@@ -59,12 +70,17 @@ export class PokemonState {
   @Action(EditPokemon)
   edit(ctx: StateContext<PokemonStateModel>, action: EditPokemon) {
     const state = ctx.getState();
+    const { roster } = state;
     const {id, data } = action.payload;
-    this.api.patch(id, data).pipe(
+    return this.api.patch(id, data).pipe(
       tap(res => {
-        // Find the pokemon and replace it with the server result. 
+        // Find the pokemon and replace it with the server result.
         const pokemon = res;
-        ctx.patchState({ roster: [...state.roster, pokemon ]});
+        const idx = roster.findIndex(p => p.id === pokemon.id);
+        if (idx !== -1) {
+          roster[idx] = pokemon;
+        }
+        ctx.patchState({roster});
       })
     );
   }
@@ -72,11 +88,27 @@ export class PokemonState {
   delete(ctx: StateContext<PokemonStateModel>, action: DeletePokemon) {
     const state = ctx.getState();
     const { id } = action.payload;
-    this.api.delete(id).pipe(
+    return this.api.delete(id).pipe(
       tap(res => {
         const roster = res;
         ctx.patchState({ roster });
       })
+    );
+  }
+  @Action(ReorderPokemon)
+  reorder(ctx: StateContext<PokemonStateModel>, action: ReorderPokemon) {
+    const state = ctx.getState();
+    const { from, to } = action.payload;
+    const { roster } = state;
+    const fPokemon = roster[from];
+    const tPokemon = roster[to];
+
+    return combineLatest([this.api.patch(fPokemon.id, {order: to}), this.api.patch(tPokemon.id, {order: from})]).pipe(
+     tap(([fp, tp]) => {
+       roster[from] = fp;
+       roster[to] = tp;
+       ctx.patchState({roster});
+     }),
     );
   }
 }

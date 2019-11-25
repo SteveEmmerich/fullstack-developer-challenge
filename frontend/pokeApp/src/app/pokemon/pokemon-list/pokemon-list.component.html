@@ -1,3 +1,15 @@
-<p>
-  pokemon-list works!
-</p>
+<ion-list>
+  <ion-reorder-group (ionItemReorder)="changeOrder($event)" disabled="false">
+    <ion-item (click)="showDetails(pokemon)" *ngFor="let pokemon of (roster$ | async)">
+        <ion-avatar slot="start">
+          <img src="pokemon.img" alt="pokemon.name">
+        </ion-avatar>
+        <ion-label>{{pokemon.name}} AKA {{pokemon.nickname}} </ion-label>
+        <ion-label> {{pokemon.order}}</ion-label>
+        <ion-reorder slot="end"></ion-reorder>
+        <ion-button (click)="delete(pokemon)">
+          <ion-icon name="trash" ></ion-icon>
+        </ion-button>
+    </ion-item>
+  </ion-reorder-group>
+</ion-list>

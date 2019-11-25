@@ -5,21 +5,22 @@ import {
   BASE_URL,
   POKEMON_ENDPOINT,
 } from '../../../environments/environment';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable()
 export class PokemonService {
 
-  url: string = '';
+  url: string = `${BASE_URL}/${POKEMON_ENDPOINT}`;
   constructor(private api: HttpClient) { }
 
-  fetch() {
-    return this.api.get(this.url).pipe(
+  fetch(tid: string) {
+    return this.api.get(`${this.url}?trainerId=${tid}`).pipe(
+      tap(data => console.log(`Pokemon: ${data}`)),
       map(data => data as Pokemon[])
     );
   }
   post(data: Pokemon) {
-    return this.api.post(this.url, data).pipe(
+    return this.api.post(`${this.url}`, data).pipe(
       map(res => res as Pokemon)
     );
   }
