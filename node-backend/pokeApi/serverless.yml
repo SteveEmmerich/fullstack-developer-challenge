@@ -1,0 +1,84 @@
+# NOTE: update this with your service name
+service: pokeApi
+
+# Create an optimized package for our functions 
+package:
+  individually: true
+
+plugins:
+  - serverless-bundle # Package our functions with Webpack
+  - serverless-offline
+  - serverless-dotenv-plugin # Load .env as environment variables
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: dev
+  region: us-east-1
+  # To load environment variables externally
+  # rename env.example to .env and uncomment
+  # the following line. Also, make sure to not
+  # commit your .env.
+  #
+  environment:
+    sampleEnvVar: ${env:SAMPLE_ENV_VAR}
+     #postgresql
+    POSTGRESQL_HOST: ${self:custom.POSTGRESQL.HOST}
+    POSTGRESQL_PORT: ${self:custom.POSTGRESQL.PORT}
+    #common
+    DB_NAME: ${self:custom.DB_NAME}
+    USERNAME: ${self:custom.USERNAME}
+    PASSWORD: ${self:custom.PASSWORD}
+custom:
+  DB_NAME: pokeapi
+  USERNAME: master
+  PASSWORD: password
+  POSTGRESQL:
+    HOST:
+      Fn:GetAtt: [PostgreSqlRDSInstance, Endpoint.Address]
+    PORT:
+      Fn:GetAtt: [PostgreSqlRDSInstance, Endpoint.Port]
+  bundle:
+    externals: 
+      - "pg/native"
+resources:
+  Resources:
+    LambdaRole: ${file(./resource/LambdaRole.yml)}
+    PostgreSqlRDSInstance: ${file(./resource/PostgreSqlRDSInstance.yml)}
+functions:
+  service:
+    handler: trainer.get.main
+    events:
+      - http:
+          path: trainer/{id}
+          method: get
+    handler: trainer.create.main
+    events:
+      - http:
+          path: trainer
+          method: post
+    handler: trainer.patch.main
+    events:
+      - http:
+          path: trainer/{id}
+          method: patch
+    handler: pokemon.get.main
+    events:
+      - http:
+          path: pokemon
+          method: get
+    handler: pokemon.create.main
+    events:
+      - http:
+          path: pokemon
+          method: post
+    handler: pokemon.patch.main
+    events:
+      - http:
+          path: pokemon/{id}
+          method: patch
+    handler: pokemon.delete.main
+    events:
+      - http:
+          path: pokemon/{id}
+          method: delete
