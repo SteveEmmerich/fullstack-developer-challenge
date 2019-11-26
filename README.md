@@ -24,6 +24,7 @@ Manage your trainer and their roster of pokemon through a mobile ready interface
 3. AWS Lambda (Node)
 4. AWS RDS (postgres)
 
-## How this will be reviewed
+## How far did I get
+Untested, but I have most of the code complete. Amplify and the Login page where not working, and I have not implemented fetching the Poke Api.
 
-This is in no way a pass/fail exercise. The reviewers will be looking at the overall solution, what technologies were used, and how those technologies were implemented. The reviewers will also be looking at aspects of the approach that include code cleanliness and pattern usage. The developer should demonstrate a solid understanding of how the components of a tech stack come together to produce a functioning web application.
+I will submit what I have but continue to work on it. 
