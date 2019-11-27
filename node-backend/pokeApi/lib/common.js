@@ -71,13 +71,12 @@ export const addTrainer = async (client, trainerData) => {
 };
 
 export const getTrainer = async (client, trainerId) => {
- 
   try{
     await client.query(`
       SELECT * FROM Trainers WHERE uuid = $1
     `, [trainerId]);
   } catch(e) {
-    throw e
+    throw e;
   }
 };
 export const patchTrainer = async (client, trainerData) => {
@@ -87,7 +86,7 @@ export const patchTrainer = async (client, trainerData) => {
       UPDATE trainers SET age = $1 WHERE uuid = $2
     `, [age, uuid]);
   } catch(e) {
-    throw e
+    throw e;
   }
 };
 export const getPokemon = async (client, trainerId) => {
@@ -96,10 +95,9 @@ export const getPokemon = async (client, trainerId) => {
       SELECT * FROM pokemon WHERE trainerId = $1
     `, [trainerId]);
   } catch(e) {
-    throw e
+    throw e;
   }
 };
-
 
 export const deletePokemon = async (client, pokemonId) => {
   try{
@@ -108,7 +106,7 @@ export const deletePokemon = async (client, pokemonId) => {
     `, [pokemonId]);
     await client.query(`
       UPDATE trainers SET roster = array_remove(roster, $1);
-    `, [pokemonId])
+    `, [pokemonId]);
   } catch (e) {
     throw e;
   }

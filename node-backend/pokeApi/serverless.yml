@@ -1,3 +1,5 @@
+org: steveemmerich
+app: myapp
 # NOTE: update this with your service name
 service: pokeApi
 

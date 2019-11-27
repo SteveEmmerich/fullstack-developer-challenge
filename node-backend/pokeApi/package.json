@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "aws-sdk": "^2.579.0",
+    "prettier": "^1.19.1",
     "serverless-bundle": "^1.2.5",
     "serverless-dotenv-plugin": "^2.1.1",
     "serverless-offline": "^5.3.3"
@@ -22,5 +23,11 @@
   "dependencies": {
     "pg": "^7.14.0",
     "uuid": "^3.3.3"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true
   }
 }
