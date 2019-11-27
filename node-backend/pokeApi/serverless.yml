@@ -46,37 +46,43 @@ resources:
     LambdaRole: ${file(./resource/LambdaRole.yml)}
     PostgreSqlRDSInstance: ${file(./resource/PostgreSqlRDSInstance.yml)}
 functions:
-  service:
+  service.trainer.get:
     handler: trainer.get.main
     events:
       - http:
           path: trainer/{id}
           method: get
+  service.trainer.create:
     handler: trainer.create.main
     events:
       - http:
           path: trainer
           method: post
+  service.trainer.patch:
     handler: trainer.patch.main
     events:
       - http:
           path: trainer/{id}
           method: patch
+  service.pokemon.get:
     handler: pokemon.get.main
     events:
       - http:
           path: pokemon
           method: get
+  serivce.pokemon.create:
     handler: pokemon.create.main
     events:
       - http:
           path: pokemon
           method: post
+  service.pokemon.patch:
     handler: pokemon.patch.main
     events:
       - http:
           path: pokemon/{id}
           method: patch
+  service.pokemon.delete:
     handler: pokemon.delete.main
     events:
       - http:
