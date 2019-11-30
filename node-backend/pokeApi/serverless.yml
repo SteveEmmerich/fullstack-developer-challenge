@@ -3,7 +3,7 @@ app: myapp
 # NOTE: update this with your service name
 service: pokeApi
 
-# Create an optimized package for our functions 
+# Create an optimized package for our functions
 package:
   individually: true
 
@@ -14,7 +14,7 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   stage: dev
   region: us-east-1
   # To load environment variables externally
@@ -23,8 +23,9 @@ provider:
   # commit your .env.
   #
   environment:
-    sampleEnvVar: ${env:SAMPLE_ENV_VAR}
-     #postgresql
+    sampleEnvVar:
+      ${env:SAMPLE_ENV_VAR}
+      #postgresql
     POSTGRESQL_HOST: ${self:custom.POSTGRESQL.HOST}
     POSTGRESQL_PORT: ${self:custom.POSTGRESQL.PORT}
     #common
@@ -41,8 +42,8 @@ custom:
     PORT:
       Fn:GetAtt: [PostgreSqlRDSInstance, Endpoint.Port]
   bundle:
-    externals: 
-      - "pg/native"
+    externals:
+      - 'pg/native'
 resources:
   Resources:
     LambdaRole: ${file(./resource/LambdaRole.yml)}
@@ -70,7 +71,7 @@ functions:
     handler: pokemon.get.main
     events:
       - http:
-          path: pokemon
+          path: pokemon/{trainerId}
           method: get
   serivce.pokemon.create:
     handler: pokemon.create.main
