@@ -1,11 +1,11 @@
-import { v4 } from 'uuid/v4';
+import { v4 } from 'uuid';
 import { init, buildTables, addToRoster } from './lib/common';
 import { success, failure } from './lib/response';
 
 export const main = async (event, context) => {
   const data = JSON.parse(event.body);
 
-  const client = init();
+  const client = await init();
   client.connect();
   buildTables(client);
 
@@ -18,7 +18,7 @@ export const main = async (event, context) => {
   } catch (e) {
     result = failure({ error: e });
   } finally {
-    client.end();
+    await client.end();
     return result;
   }
 };

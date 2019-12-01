@@ -69,81 +69,53 @@ export const buildTables = async client => {
   }
 };
 
-export const getTrainerById = async (client, uuid) => {
-  let trainer = {};
-  const trainerFromDB = await client.query(
-    `
-    select all from trainers where uuid = $1
-  `,
-    [uuid]
-  );
-  if (trainerFromDB.rows.length == 0) {
-    return null;
+const tryQuery = async (client, data, queryString) => {
+  try {
+    const res = await client.query(queryString, data);
+    const { rows } = res;
+    console.log(`res: ${JSON.stringify(res.rows[0])}`);
+    return rows.length !== 0 ? rows[0] : null;
+  } catch (e) {
+    if (process.env.LOG_LEVEL === 'debug') {
+      const message = `Error on query: ${queryString}\n data: ${data} \n error: ${e}`;
+      console.error(message);
+      throw message;
+    } else {
+      throw e.detail ? e.detail : e;
+    }
   }
-  trainer = trainerFromDB.rows[0];
-  return trainer;
 };
 
 export const addTrainer = async (client, trainerData) => {
   console.log(`trainer Data: ${JSON.stringify(trainerData)}`);
   const { uuid, name, age, email } = trainerData;
-  try {
-    const { rows } = await client.query(
-      `
-    insert into trainers(uuid, name, age, email) VALUES($1, $2, $3, $4) RETURNING *;
-  `,
-      [uuid, name, age, email]
-    );
-    console.log(`response: ${JSON.stringify(rows[0])}`);
-    return rows[0];
-  } catch (e) {
-    const message = `Trainer Create: ${JSON.stringify(
-      trainerData
-    )}, Error: ${JSON.stringify(e.detail)}`;
-    console.log(message);
-    throw message;
-  }
+  return tryQuery(
+    client,
+    [uuid, name, age, email],
+    `insert into trainers(uuid, name, age, email) VALUES($1, $2, $3, $4) RETURNING *;`
+  );
 };
 
 export const getTrainer = async (client, trainerId) => {
-  try {
-    const res = await client.query(
-      `
-      SELECT * FROM trainers WHERE id = $1;
-    `,
-      [trainerId]
-    );
-    console.log(JSON.stringify(trainerId));
-    return res.rows[0];
-  } catch (e) {
-    const message = `Trainer Get: ${JSON.stringify(
-      trainerId
-    )}, Error: ${JSON.stringify(e.detail)}`;
-    console.log(message);
-    throw message;
-  }
+  return tryQuery(client, [trainerId], `SELECT * FROM trainers WHERE id = $1;`);
 };
+
 export const patchTrainer = async (client, trainerData) => {
   const { age, uuid } = trainerData;
-  try {
-    const { rows } = await client.query(
-      `
-      UPDATE trainers SET age = $1 WHERE id = $2 RETURNING *;
-    `,
-      [age, uuid]
-    );
-    console.log(`response: ${JSON.stringify(rows)}`);
-    return rows[0];
-  } catch (e) {
-    const message = `Trainer Patch: ${JSON.stringify(
-      trainerData
-    )}, Error: ${JSON.stringify(e.detail)}`;
-    console.log(message);
-    throw message;
-  }
+  return tryQuery(
+    client,
+    [age, uuid],
+    `UPDATE trainers SET age = $1 WHERE id = $2 RETURNING *;`
+  );
 };
+
 export const getPokemon = async (client, trainerId) => {
-  try {
+  return tryQuery(
+    client,
+    [trainerId],
+    `SELECT * FROM pokemon WHERE trainerId = $1`
+  );
+  /*   try {
     await client.query(
       `
       SELECT * FROM pokemon WHERE trainerId = $1
@@ -152,7 +124,7 @@ export const getPokemon = async (client, trainerId) => {
     );
   } catch (e) {
     throw e;
-  }
+  } */
 };
 
 export const deletePokemon = async (client, pokemonId) => {
@@ -176,7 +148,12 @@ export const deletePokemon = async (client, pokemonId) => {
 
 export const patchPokemon = async (client, pokemonData) => {
   const { uuid, nickname } = pokemonData;
-  try {
+  return tryQuery(
+    client,
+    [nickname, uuid],
+    `UPDATE pokemon SET nickname = $1 WHERE uuid = $2;`
+  );
+  /*  try {
     await client.query(
       `
       UPDATE pokemon SET nickname = $1 WHERE uuid = $2;
@@ -185,7 +162,7 @@ export const patchPokemon = async (client, pokemonData) => {
     );
   } catch (e) {
     throw e;
-  }
+  } */
 };
 
 export const searchPokedex = async (client, trainerData) => {
@@ -202,21 +179,39 @@ export const searchPokedex = async (client, trainerData) => {
 
 // Adds one pokemon to the roster.
 export const addToRoster = async (client, data) => {
-  const { uuid, nickname, order, trainerId, pokedexId } = data;
-  try {
-    await client.query(
+  const { uuid, nickname, orderNum, trainerId, pokedexId } = data;
+  //try {
+  const pokemon = await tryQuery(
+    client,
+    [uuid, nickname, orderNum, trainerId, pokedexId],
+    `insert into pokemon(uuid, nickname, orderNum, trainerId, pokedexId) VALUES($1, $2, $3, $4, $5) RETURNING *;`
+  );
+  console.log(`Insert response: ${JSON.stringify(pokemon)}`);
+  if (!pokemon) return pokemon;
+  /*  const { rows } = client.query(
       `
-      insert into pokemon (uuid, nickname, order, trainerId, pokedexId) VALUES($1, $2,$ 3, $4, $5) RETURNING;
+      insert into pokemon (uuid, nickname, order, trainerId, pokedexId) VALUES($1, $2,$ 3, $4, $5) RETURNING *;
     `,
       [uuid, nickname, order, trainerId, pokedexId]
-    );
-    await client.query(
+    ); */
+  const trainer = await tryQuery(
+    client,
+    [uuid, trainerId],
+    `update trainers set roster = array_append(roster, $1) where trainers.id = $2;`
+  );
+
+  console.log(`Insert response: ${JSON.stringify(trainer)}`);
+  if (!trainer) return trainer;
+
+  return pokemon;
+  /*const res = await client.query(
       `
-      update trainers set roster = array_cat(roster, {$1}) where trainers.id = $2;
+      update trainers set roster = array_append(roster, $1) where trainers.id = $2;
     `,
-      [uuid, trainerId]
+      [uuid.toString(), trainerId]
     );
+    console.log(`update response: ${JSON.stringify(res)}`);
   } catch (e) {
     throw e;
-  }
+  }*/
 };

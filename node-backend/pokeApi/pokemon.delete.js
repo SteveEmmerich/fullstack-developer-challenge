@@ -5,7 +5,7 @@ export const main = async (event, context) => {
   // TODO: Change this to url params
   const data = JSON.parse(event.body);
 
-  const client = init();
+  const client = await init();
   client.connect();
   buildTables(client);
 
