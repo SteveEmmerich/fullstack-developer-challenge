@@ -71,7 +71,7 @@ functions:
     handler: pokemon.get.main
     events:
       - http:
-          path: pokemon/{trainerId}
+          path: pokemon/{id}
           method: get
   serivce.pokemon.create:
     handler: pokemon.create.main

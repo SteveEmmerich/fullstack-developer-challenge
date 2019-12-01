@@ -128,10 +128,16 @@ export const getPokemon = async (client, trainerId) => {
 };
 
 export const deletePokemon = async (client, pokemonId) => {
-  try {
+  await tryQuery(client, [pokemonId], `DELETE FROM pokemon WHERE id = $1;`);
+  await tryQuery(
+    client,
+    [pokemonId],
+    `UPDATE trainers SET roster = array_remove(roster, $1);`
+  );
+  /*try {
     await client.query(
       `
-      DELETE * FROM pokemon WHERE uuid = $1
+      DELETE * FROM pokemon WHERE id = $1
     `,
       [pokemonId]
     );
@@ -143,15 +149,15 @@ export const deletePokemon = async (client, pokemonId) => {
     );
   } catch (e) {
     throw e;
-  }
+  }*/
 };
 
 export const patchPokemon = async (client, pokemonData) => {
-  const { uuid, nickname } = pokemonData;
+  const { id, nickname } = pokemonData;
   return tryQuery(
     client,
-    [nickname, uuid],
-    `UPDATE pokemon SET nickname = $1 WHERE uuid = $2;`
+    [nickname, id],
+    `UPDATE pokemon SET nickname = $1 WHERE id = $2 returning *;`
   );
   /*  try {
     await client.query(
@@ -196,12 +202,12 @@ export const addToRoster = async (client, data) => {
     ); */
   const trainer = await tryQuery(
     client,
-    [uuid, trainerId],
+    [pokemon.id, trainerId],
     `update trainers set roster = array_append(roster, $1) where trainers.id = $2;`
   );
 
   console.log(`Insert response: ${JSON.stringify(trainer)}`);
-  if (!trainer) return trainer;
+  //if (!trainer) return trainer;
 
   return pokemon;
   /*const res = await client.query(

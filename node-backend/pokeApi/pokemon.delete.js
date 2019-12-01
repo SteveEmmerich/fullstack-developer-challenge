@@ -3,7 +3,7 @@ import { success, failure } from './lib/response';
 
 export const main = async (event, context) => {
   // TODO: Change this to url params
-  const data = JSON.parse(event.body);
+  const data = JSON.parse(event.pathParameters.id);
 
   const client = await init();
   client.connect();
@@ -17,7 +17,7 @@ export const main = async (event, context) => {
   } catch (err) {
     result = failure({ error: err });
   } finally {
-    client.end();
+    await client.end();
     return result;
   }
 };
