@@ -11,7 +11,7 @@ import { LoginPage } from './login.page';
 import {
   AmplifyAngularModule,
   AmplifyIonicModule,
-  AmplifyService
+  AmplifyService,
 } from 'aws-amplify-angular';
 
 @NgModule({
@@ -21,12 +21,10 @@ import {
     IonicModule,
     AmplifyAngularModule,
     AmplifyIonicModule,
-    LoginPageRoutingModule
+    LoginPageRoutingModule,
   ],
   declarations: [LoginPage],
   providers: [AmplifyService],
-  entryComponents:[
-    LoginPage
-  ]
+  entryComponents: [LoginPage],
 })
 export class LoginPageModule {}

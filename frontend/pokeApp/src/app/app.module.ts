@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -26,17 +27,18 @@ import { AuthModule } from './auth/auth.module';
     HttpClientModule,
     ReactiveFormsModule,
     SharedModule,
-    AuthModule,
-    NgxsModule.forRoot([]),
-    NgxsFormPluginModule.forRoot(),
-    NgxsReduxDevtoolsPluginModule.forRoot(),
 
+    NgxsModule.forRoot([]),
+    NgxsRouterPluginModule.forRoot(),
+    NgxsFormPluginModule.forRoot(),
+    AuthModule,
+    NgxsReduxDevtoolsPluginModule.forRoot(),
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

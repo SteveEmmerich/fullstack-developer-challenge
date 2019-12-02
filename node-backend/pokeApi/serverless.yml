@@ -46,6 +46,7 @@ custom:
       - 'pg/native'
 resources:
   Resources:
+    ApiGatewayErrors: ${file(./resource/api-gateway-errors.yml)}
     LambdaRole: ${file(./resource/LambdaRole.yml)}
     PostgreSqlRDSInstance: ${file(./resource/PostgreSqlRDSInstance.yml)}
 functions:

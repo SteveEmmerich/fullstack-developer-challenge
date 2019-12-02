@@ -23,13 +23,15 @@
     "userpoolClientGenerateSecret": true,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [
+        "preferred_username",
         "email"
     ],
     "userpoolClientReadAttributes": [
-        "email"
+        "email",
+        "preferred_username"
     ],
     "userpoolClientLambdaRole": "pokeapbc1ee16f_userpoolclient_lambda_role",
-    "userpoolClientSetAttributes": false,
+    "userpoolClientSetAttributes": true,
     "resourceName": "pokeappbc1ee16f",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
@@ -44,10 +46,21 @@
             "Arn"
         ]
     },
-    "useDefault": "default",
+    "useDefault": "manual",
     "usernameAttributes": [
         "email"
     ],
-    "userPoolGroupList": [],
-    "dependsOn": []
+    "userPoolGroupList": [
+        "pokeapp"
+    ],
+    "dependsOn": [],
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "triggers": "{}",
+    "hostedUI": false,
+    "parentStack": {
+        "Ref": "AWS::StackId"
+    },
+    "permissions": [],
+    "thirdPartyAuth": false
 }
